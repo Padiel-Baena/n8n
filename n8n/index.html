@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Isekai Destiny Generator</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding: 50px; background: #1a1a1a; color: white; }
+    .card { background: #2a2a2a; padding: 20px; border-radius: 10px; display: inline-block; }
+    input { display: block; margin: 10px auto; padding: 10px; border-radius: 5px; border: none; }
+    button { padding: 10px 20px; background: #ff6b6b; border: none; color: white; cursor: pointer; border-radius: 5px; }
+    #resultado { margin-top: 20px; font-weight: bold; color: #ffd93d; font-size: 1.2rem; }
+  </style>
+</head>
+<body>
+<div class="card">
+  <h2>¿En qué te reencarnarás?</h2>
+  <input type="text" id="nombre" placeholder="Tu nombre de héroe">
+  <input type="number" id="fuerza" placeholder="Puntos de fuerza">
+  <input type="number" id="inteligencia" placeholder="Puntos de Inteligencia">
+  <button onclick="enviarDatos()">Descubrir Destino</button>
+  <div id="resultado"></div>
+</div>
+
+<script>
+  async function enviarDatos() {
+    const divResultado = document.getElementById('resultado');
+    divResultado.innerText = "Calculando destino...";
+
+    const payload = {
+      "Nombre": document.getElementById('nombre').value,
+      "Puntos de fuerza": parseInt(document.getElementById('fuerza').value),
+      "Puntos de Inteligencia": parseInt(document.getElementById('inteligencia').value)
+    };
+
+    try {
+      // USA AQUÍ TU PRODUCTION URL (La de la imagen 2d8edf)
+      const response = await fetch('http://100.49.119.83:5678/webhook/generador-isekai', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await response.json();
+      // Mostramos el campo 'resultado' que generas en los nodos Edit Fields
+      divResultado.innerText = data.resultado;
+    } catch (error) {
+      divResultado.innerText = "Error al conectar con el servidor.";
+      console.error(error);
+    }
+  }
+</script>
+</body>
+</html>
